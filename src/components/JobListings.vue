@@ -20,8 +20,8 @@ const state = reactive({
 
 onMounted(async () => {
   try {
-    // http://localhost:5000/jobs /api/jobs
-    const response = await axios.get('https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb');
+    //  /api/jobs https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb
+    const response = await axios.get('/jobs.json');
     state.jobs = response.data;
   } catch (error) {
     console.error('Error fetching jobs', error);
