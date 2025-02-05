@@ -22,6 +22,7 @@ onMounted(async () => {
   try {
     //  /api/jobs https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb
     const response = await axios.get('/jobs.json');
+    // whre bug was faced (from state.jobs = response.data => state.jobs = response.data.jobs || [])
     state.jobs = response.data.jobs || [];
   } catch (error) {
     console.error('Error fetching jobs', error);
