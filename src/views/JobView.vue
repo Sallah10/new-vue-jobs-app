@@ -21,7 +21,8 @@ const deleteJob = async () => {
   try {
     const confirm = window.confirm('Are you sure you want to delete this job?');
     if (confirm) {
-      await axios.delete(`/api/jobs/${jobId}`);
+      // `/api/jobs/${jobId}`
+      await axios.delete(`/jobs.json/${jobId}`);
       toast.success('Job Deleted Successfully');
       router.push('/jobs');
     }
@@ -33,8 +34,9 @@ const deleteJob = async () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`/api/jobs/${jobId}`);
-    state.job = response.data;
+    // `/api/jobs/${jobId}`
+    const response = await axios.get(`/jobs.json/${jobId}`);
+    state.jobs = response.data.jobs || [];
   } catch (error) {
     console.error('Error fetching job', error);
   } finally {
