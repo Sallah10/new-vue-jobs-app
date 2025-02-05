@@ -22,7 +22,7 @@ const deleteJob = async () => {
     const confirm = window.confirm('Are you sure you want to delete this job?');
     if (confirm) {
       // `/api/jobs/${jobId}`
-      await axios.delete('/jobs.json/${jobId}');
+      await axios.delete(`/api/jobs/${jobId}`);
       toast.success('Job Deleted Successfully');
       router.push('/jobs');
     }
@@ -32,11 +32,12 @@ const deleteJob = async () => {
   }
 };
 
+
 onMounted(async () => {
   try {
-    // `/api/jobs/${jobId}`
-    const response = await axios.get('/jobs.json/${jobId}');
-    state.job = response.data.job || [];
+    // `/api/jobs/${jobId}``/jobs.json/${jobId}`
+    const response = await axios.get(`/api/jobs/${jobId}`);
+    state.job = response.data;
   } catch (error) {
     console.error('Error fetching job', error);
   } finally {
@@ -79,16 +80,14 @@ onMounted(async () => {
           </div>
         </main>
 
-        <!-- Sidebar -->
         <aside>
-          <!-- Company Info -->
           <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="text-xl font-bold mb-6">Company Info</h3>
 
-            <h2 class="text-2xl">{{ state.job.company.name }}</h2>
+            <h2 class="text-2xl">{{ state.job.company?.name }}</h2>
 
             <p class="my-2">
-              {{ state.job.company.description }}
+              {{ state.job.company?.description }}
             </p>
 
             <hr class="my-4" />
@@ -96,13 +95,13 @@ onMounted(async () => {
             <h3 class="text-xl">Contact Email:</h3>
 
             <p class="my-2 bg-green-100 p-2 font-bold">
-              {{ state.job.company.contactEmail }}
+              {{ state.job.company?.contactEmail }}
             </p>
 
             <h3 class="text-xl">Contact Phone:</h3>
 
             <p class="my-2 bg-green-100 p-2 font-bold">
-              {{ state.job.company.contactPhone }}
+              {{ state.job.company?.contactPhone }}
             </p>
           </div>
 
