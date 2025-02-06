@@ -105,7 +105,6 @@ onMounted(async () => {
             </p>
           </div>
 
-          <!-- Manage -->
           <div class="bg-white p-6 rounded-lg shadow-md mt-6">
             <h3 class="text-xl font-bold mb-6">Manage Job</h3>
             <RouterLink
