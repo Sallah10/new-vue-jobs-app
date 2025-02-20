@@ -36,7 +36,7 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await axios.post('/api/jobs', newJob);
+    const response = await axios.post('https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb', newJob);
     toast.success('Job Added Successfully');
     router.push(`/jobs/${response.data.id}`);
   } catch (error) {
