@@ -20,9 +20,9 @@ const state = reactive({
 
 onMounted(async () => {
   try {
-    //  /api/jobs https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb
-    const response = await axios.get('https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb');
-    // whre bug was faced (from state.jobs = response.data => state.jobs = response.data.jobs || [])
+    //  /api/jobs https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb
+    const response = await axios.get('https://raw.githubusercontent.com/Sallah10/Vue-job-json-file/refs/heads/main/jobs.json');
+    // where bug was faced (from state.jobs = response.data => state.jobs = response.data.jobs || [])
     state.jobs = response.data;
   } catch (error) {  
     console.error('Error fetching jobs', error);

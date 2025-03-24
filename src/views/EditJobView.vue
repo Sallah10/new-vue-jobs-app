@@ -46,7 +46,7 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await axios.put(`/jobs.json/${jobId}`, updatedJob);
+    const response = await axios.put(`https://raw.githubusercontent.com/Sallah10/Vue-job-json-file/refs/heads/main/jobs.json/${jobId}`, updatedJob);
     toast.success('Job Updated Successfully');
     router.push(`/jobs/${response.data.id}`);
   } catch (error) {
@@ -57,7 +57,7 @@ const handleSubmit = async () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb/${jobId}`);
+    const response = await axios.get(`https://raw.githubusercontent.com/Sallah10/Vue-job-json-file/refs/heads/main/jobs.json/${jobId}`);
     state.job = response.data.job || [];
     form.type = state.job.type;
     form.title = state.job.title;
