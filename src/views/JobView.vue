@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import BackButton from '@/components/BackButton.vue';
 import { reactive, onMounted } from 'vue';
@@ -40,6 +40,46 @@ onMounted(async () => {
     state.job = response.data;
   } catch (error) {
     console.error('Error fetching job', error);
+  } finally {
+    state.isLoading = false;
+  }
+});
+</script> -->
+<script setup>
+import { db } from '@/firebase';
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
+
+const jobId = route.params.id;
+
+const deleteJob = async () => {
+  try {
+    const confirm = window.confirm('Are you sure you want to delete this job?');
+    if (confirm) {
+      await deleteDoc(doc(db, "jobs", jobId));
+      toast.success('Job Deleted Successfully');
+      router.push('/jobs');
+    }
+  } catch (error) {
+    console.error('Error deleting job:', error);
+    toast.error('Job Not Deleted');
+  }
+};
+
+onMounted(async () => {
+  try {
+    const docRef = doc(db, "jobs", jobId);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      state.job = {
+        id: docSnap.id,
+        ...docSnap.data()
+      };
+    } else {
+      router.push('/404');
+    }
+  } catch (error) {
+    console.error("Error fetching job:", error);
   } finally {
     state.isLoading = false;
   }

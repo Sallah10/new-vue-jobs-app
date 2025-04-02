@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import jobsData from "./jobs.json"; // Node 17+ required assert { type: "json" }
+import jobsData from "./jobs.json"; 
 
 // Your Firebase config
 const firebaseConfig = {

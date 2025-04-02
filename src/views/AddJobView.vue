@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import router from '@/router';
 import { reactive } from 'vue';
 import { useToast } from 'vue-toastification';
@@ -41,6 +41,33 @@ const handleSubmit = async () => {
     router.push(`/jobs/${response.data.id}`);
   } catch (error) {
     console.error('Error fetching job', error);
+    toast.error('Job Was Not Added');
+  }
+};
+</script> -->
+<script setup>
+import { db } from '@/firebase';
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+
+const router = useRouter();
+const toast = useToast();
+
+const form = reactive({
+  // ... keep your existing form structure
+});
+
+const handleSubmit = async () => {
+  try {
+    const docRef = await addDoc(collection(db, "jobs"), {
+      ...form,
+      createdAt: serverTimestamp()
+    });
+    toast.success('Job Added Successfully');
+    router.push(`/jobs/${docRef.id}`);
+  } catch (error) {
+    console.error('Error adding job:', error);
     toast.error('Job Was Not Added');
   }
 };

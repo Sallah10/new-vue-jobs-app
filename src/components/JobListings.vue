@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { RouterLink } from 'vue-router';
 import JobListing from './JobListing.vue';
 import { reactive, defineProps, onMounted } from 'vue';
@@ -26,6 +26,34 @@ onMounted(async () => {
     state.jobs = response.data;
   } catch (error) {  
     console.error('Error fetching jobs', error);
+  } finally {
+    state.isLoading = false;
+  }
+});
+</script> -->
+<script setup>
+import { db } from '@/firebase';
+import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+
+const state = reactive({
+  jobs: [],
+  isLoading: true
+});
+
+onMounted(async () => {
+  try {
+    const q = query(
+      collection(db, "jobs"),
+      orderBy("createdAt", "desc")
+    );
+    const querySnapshot = await getDocs(q);
+    
+    state.jobs = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
   } finally {
     state.isLoading = false;
   }
