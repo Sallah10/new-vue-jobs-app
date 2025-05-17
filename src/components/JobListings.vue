@@ -1,92 +1,36 @@
-<!-- <script setup>
-import { RouterLink } from 'vue-router';
-import JobListing from './JobListing.vue';
-import { reactive, defineProps, onMounted } from 'vue';
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import axios from 'axios';
-
-defineProps({
-  limit: Number,
-  showButton: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const state = reactive({
-  jobs: [],
-  isLoading: true,
-});
-
-onMounted(async () => {
-  try {
-    //  /api/jobs https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb https://api.jsonbin.io/v3/b/67a29eafe41b4d34e48430fb
-    const response = await axios.get('https://raw.githubusercontent.com/Sallah10/Vue-job-json-file/refs/heads/main/jobs.json');
-    // where bug was faced (from state.jobs = response.data => state.jobs = response.data.jobs || [])
-    state.jobs = response.data;
-  } catch (error) {  
-    console.error('Error fetching jobs', error);
-  } finally {
-    state.isLoading = false;
-  }
-});
-</script> -->
 <script setup>
 import { db } from '@/firebase';
-import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { reactive, onMounted, onUnmounted } from 'vue';
 
 const state = reactive({
   jobs: [],
   isLoading: true
 });
 
-onMounted(async () => {
-  try {
-    const q = query(
-      collection(db, "jobs"),
-      orderBy("createdAt", "desc")
-    );
-    const querySnapshot = await getDocs(q);
-    
+let unsubscribe; // To store the unsubscribe function
+
+onMounted(() => {
+  const q = query(
+    collection(db, "jobs"),
+    orderBy("createdAt", "desc")
+  );
+  
+  // Set up real-time listener
+  unsubscribe = onSnapshot(q, (querySnapshot) => {
     state.jobs = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
-  } catch (error) {
-    console.error("Error fetching jobs:", error);
-  } finally {
     state.isLoading = false;
-  }
+  }, (error) => {
+    console.error("Error listening to jobs:", error);
+    state.isLoading = false;
+  });
+});
+
+// Clean up listener when component unmounts
+onUnmounted(() => {
+  if (unsubscribe) unsubscribe();
 });
 </script>
-
-<template>
-  <section class="bg-blue-50 px-4 py-10">
-    <div class="container-xl lg:container m-auto">
-      <h2 class="text-3xl font-bold text-green-500 mb-6 text-center">
-        Browse Jobs
-      </h2>
-      
-      <div v-if="state.isLoading" class="text-center text-gray-500 py-6">
-        <PulseLoader />
-      </div>
-
-      
-      <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <JobListing
-          v-for="job in state.jobs.slice(0, limit || state.jobs.length)"
-          :key="job.id"
-          :job="job"
-        />
-      </div>
-    </div>
-  </section>
-
-  <section v-if="showButton" class="m-auto max-w-lg my-10 px-6">
-    <RouterLink
-      to="/jobs"
-      class="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
-      >View All Jobs</RouterLink
-    >
-  </section>
-</template>
