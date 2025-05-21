@@ -21,4 +21,9 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  define: {
+    'process.env': {},
+    'import.meta.env': JSON.stringify(process.env)
+  },
+  envPrefix: 'VUE_APP_' // This tells Vite which env vars to expose
 });
