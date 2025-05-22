@@ -13,3 +13,8 @@ app.use(router);
 app.use(Toast);
 
 app.mount('#app');
+
+console.log('Env vars:', {
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY
+});
