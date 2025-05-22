@@ -15,6 +15,13 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
+
+// Validate configuration
+if (!firebaseConfig.projectId) {
+    throw new Error(
+        "Firebase config error! Missing projectId. Check your .env and Vercel environment variables."
+    );
+}
 //VUE_APP_FIREBASE_API_KEY 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
