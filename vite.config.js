@@ -25,5 +25,5 @@ export default defineConfig({
     'process.env': {},
     'import.meta.env': JSON.stringify(process.env)
   },
-  envPrefix: 'VUE_APP_' // This tells Vite which env vars to expose
+  // envPrefix: 'VUE_APP_' // This tells Vite which env vars to expose
 });
